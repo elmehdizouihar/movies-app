@@ -64,6 +64,6 @@ class FetchTrendingMovies extends Command
         }
 
         // Afficher un message indiquant que le processus a réussi
-        $this->info('Trending movies fetched and stored successfully!');
+        $this->info('Les films tendance ont été créés et mis à jour avec succès !');
     }
 }
