@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'; 
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Importer useNavigate
+import toastr from 'toastr';
 
 
 const Login = ({ setAuthenticated }) => {
@@ -18,7 +19,9 @@ const Login = ({ setAuthenticated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
+    if(email == '' ||password == '' ){
+      showNotification('Veuillez saisir votre adresse e-mail et votre mot de passe', 'Champs manquants')
+    }else{
     // Récupérer le cookie CSRF avant d'envoyer la requête POST
     axios.get('http://localhost:8000/sanctum/csrf-cookie', { withCredentials: true })
       .then(() => {
@@ -32,10 +35,26 @@ const Login = ({ setAuthenticated }) => {
             localStorage.setItem('auth_token', response.data.token)
             navigate("/films")
           })
-          .catch(error => console.error('Erreur:', error));
+          .catch((error) => {
+            console.error('Erreur:', error)
+            showNotification('Identifiants incorrects!', 'Erreur d\'authentificatio')
+          })
       })
       .catch(error => console.error('Erreur CSRF:', error));
+    }
+
+
   }
+
+  // Fonction pour afficher une notification 
+  const showNotification = (titleMsg , msg) => {
+    toastr.error(titleMsg, msg, {
+      closeButton: true,
+      progressBar: true,
+      positionClass: 'toast-top-right',
+    });
+  };
+
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
       <div className="card shadow-lg" style={{ width: '100%', maxWidth: '400px' }}>
