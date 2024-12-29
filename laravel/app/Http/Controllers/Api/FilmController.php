@@ -49,6 +49,51 @@ class FilmController extends Controller
             return response()->json($film);
         }
 
+        //Update un filme
+        public function update(UpdateFilm $request, $id)
+        {
+            try {
+                // Récupérer les données validées
+                $validatedData = $request->validated();
+                // Essaye de récupérer le film avec l'ID donné
+                $filme = Film::findOrFail($id);
+                // dd($request);
+                // Mise à jour des champs
+                $filme->name = $request->name;
+                $filme->title = $request->title;
+                $filme->overview = $request->overview;
+                $filme->release_date = $request->release_date;
+                $filme->media_type = $request->media_type;
+                $filme->original_language = $request->original_language;
+                $filme->popularity = $request->popularity;
+                $filme->vote_average = $request->vote_average;
+                $filme->vote_count = $request->vote_count;
+                $filme->save();
+        
+                // Retourne la réponse JSON en cas de succès
+                return response()->json([
+                    'success' => true,
+                    'message' => "Le film a été mis à jour avec succès",
+                    'filme' => $filme
+                ], 200);
+        
+            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                // Gère le cas où l'ID ne correspond à aucun film
+                return response()->json([
+                    'success' => false,
+                    'message' => "Film introuvable avec l'ID spécifié"
+                ], 404);
+        
+            } catch (\Exception $e) {
+                // Gère d'autres erreurs potentielles
+                return response()->json([
+                    'success' => false,
+                    'message' => "Une erreur s'est produite lors de la mise à jour du film",
+                    'error' => $e->getMessage()
+                ], 500);
+            }
+        }
+
         // Edit un film
         public function edit($id)
         {

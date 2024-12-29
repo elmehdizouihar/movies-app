@@ -29,7 +29,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->get('/films', [FilmController::class, 'index']);
 Route::middleware('auth:sanctum')->get('/films/{id}', [FilmController::class, 'show']);
 Route::middleware('auth:sanctum')->get('/films/{id}/edit', [FilmController::class, 'edit']);
-
+Route::middleware('auth:sanctum')->put('/films/{id}', [FilmController::class, 'update']);
 
 
 
