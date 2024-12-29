@@ -30,4 +30,23 @@ class FilmController extends Controller
             // Retourner la réponse en format JSON
             return response()->json($films);
         }
+
+        public function fil(Request $request)
+        {
+            $query = Film::query();
+    
+            if ($request->has('search')) {
+                $query->where('title', 'like', '%' . $request->search . '%');
+            }
+    
+            return response()->json($query->paginate(10));  // Pagination avec 10 films par page
+        }
+    
+        // Détails d'un filme
+        public function show($id)
+        {
+            $film = Film::findOrFail($id);
+            return response()->json($film);
+        }
+
 }
