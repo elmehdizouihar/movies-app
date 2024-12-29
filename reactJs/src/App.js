@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Im
 import Login from './auth/Login';
 import Films from './films/Films'
 import FilmDetails from './films/FilmDetails';
+import FilmEdit from './films/FilmEdit';
+
 
 
 const App = () => {
@@ -20,6 +22,9 @@ const App = () => {
 
         {/* Route pour la page de détails d'un film */}
         <Route path="/films/:id" element={<FilmDetails />} />
+
+        {/* Route pour la éditer un film */}
+        <Route path="/films/:id/edit" element={<FilmEdit />} />
 
       </Routes>
     </Router>

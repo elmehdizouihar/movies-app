@@ -78,6 +78,11 @@ const Films = () => {
     navigate(`/films/${id}`);
   };
 
+  //Edit un film
+  const handleFilmEdit = (id) => {
+    navigate(`/films/${id}/edit`);
+  };
+
   return (
     <div className="container mt-4">
       <div className="row mb-3">
@@ -115,6 +120,7 @@ const Films = () => {
                 <td>{film.original_language}</td>
                 <td className="text-center">
                 <FontAwesomeIcon icon={faEye} onClick={() => handleFilmShow(film.id)} className="text-warning mx-2" style={{ cursor: 'pointer' }} />
+                <FontAwesomeIcon icon={faEdit} onClick={() => handleFilmEdit(film.id)} className="text-success" style={{ cursor: 'pointer' }} />
                 </td>
               </tr>
             ))}
