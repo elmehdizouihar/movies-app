@@ -30,11 +30,29 @@ class AuthController extends Controller
     }
 
     public function createUser(Request $request){
+        // Vérifier si l'email existe déjà
+        $existingUser = User::where('email', "admin@gmail.com")->exists();
+    
+        if ($existingUser) {
+            return response()->json([
+                'success' => false,
+                'message' => "L'utilisateur est déjà créé."
+            ], 400); 
+        }
+    
+        // Créer l'utilisateur si l'email est unique
         $user = User::create([
-            'name' => "admin",
-            'email' => "admin@gmail.com",
-            'password' => Hash::make("123456"),
+            'name' => "admin", 
+            'email' => "admin@gmail.com", 
+            'password' => Hash::make("123456"), 
         ]);
+    
+        return response()->json([
+            'success' => true,
+            'message' => "L'utilisateur a été ajouté avec succès.",
+            'user' => $user
+        ], 201);
     }
+    
 }
 
