@@ -73,6 +73,11 @@ const Films = () => {
     };
   }, [loading]); // Ajouter `loading` comme dépendance pour empêcher les appels parallèles
 
+  //Show un film
+  const handleFilmShow = (id) => {
+    navigate(`/films/${id}`);
+  };
+
   return (
     <div className="container mt-4">
       <div className="row mb-3">
@@ -109,6 +114,7 @@ const Films = () => {
                 <td>{film.media_type}</td>
                 <td>{film.original_language}</td>
                 <td className="text-center">
+                <FontAwesomeIcon icon={faEye} onClick={() => handleFilmShow(film.id)} className="text-warning mx-2" style={{ cursor: 'pointer' }} />
                 </td>
               </tr>
             ))}
