@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
+import toastr from 'toastr';
+
 
 const Films = () => {
   const [films, setFilms] = useState([]);
@@ -13,7 +16,7 @@ const Films = () => {
   const [lastPage, setLastPage] = useState(1);
   const navigate = useNavigate();
 
-  useEffect((e) => {
+  useEffect(() => {
     const token = localStorage.getItem('auth_token');
     if (!token) {
       navigate("/");  // Rediriger si l'utilisateur n'est pas authentifié
@@ -25,10 +28,7 @@ const Films = () => {
         const response = await axios.get(`http://localhost:8000/api/films?search=${searchTerm}&page=${page}`, {
           headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` }
         });
-        // Si c'est la première page, réinitialisez les films, sinon ajoutez-les
-        console.log("response.data.last_page")
-        console.log(response.data.last_page)
-        setLastPage(response.data.last_page)
+        setLastPage(response.data.last_page);
         if (page === 1) {
           setFilms(response.data.data);
         } else {
@@ -41,7 +41,7 @@ const Films = () => {
       }
     };
     fetchFilms();
-  }, [page, searchTerm]); // `page` et `searchTerm` comme dépendances
+  }, [page, searchTerm]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -49,19 +49,8 @@ const Films = () => {
     setPage(1);  // Réinitialiser la page à 1
   };
 
-
-
-  const handleScroll = (e) => {
-    console.log("window.innerHeight + document.documentElement.scrollTop")
-    console.log(window.innerHeight + document.documentElement.scrollTop)
-    console.log("document.documentElement.offsetHeigh")
-    console.log(document.documentElement.offsetHeight)
-    console.log("lastPage")
-    console.log(lastPage)
-    console.log("page")
-    console.log(page)
+  const handleScroll = () => {
     if ((window.innerHeight + document.documentElement.scrollTop + 20 >= document.documentElement.offsetHeight) && !loading && lastPage > page) {
-      console.log("application")
       setPage(prevPage => prevPage + 1); // Charger la page suivante
     }
   };
@@ -71,17 +60,66 @@ const Films = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [loading]); // Ajouter `loading` comme dépendance pour empêcher les appels parallèles
+  }, [loading]);
 
-  //Show un film
   const handleFilmShow = (id) => {
     navigate(`/films/${id}`);
   };
 
-  //Edit un film
   const handleFilmEdit = (id) => {
     navigate(`/films/${id}/edit`);
   };
+
+  const handleFilmDelete = (id) => {
+    // Demander confirmation avant de supprimer
+    confirmAlert({
+      title: 'Confirmer la suppression',
+      message: 'Êtes-vous sûr de vouloir supprimer ce film ?',
+      buttons: [
+        {
+          label: 'Oui',
+          onClick: () => deleteFilm(id)
+        },
+        {
+          label: 'Non',
+          onClick: () => {}
+        }
+      ]
+    });
+  };
+
+  const deleteFilm = async (id) => {
+    const token = localStorage.getItem('auth_token');
+    try {
+      await axios.delete(`http://localhost:8000/api/films/${id}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      // Retirer le film de l'état local après suppression
+      setFilms(films.filter(film => film.id !== id));
+      showNotificationSuccess()
+    } catch (error) {
+      console.error('Erreur lors de la suppression du film', error);
+      showNotificationError()
+    }
+  };
+
+    // Fonction pour afficher une notification lorsque la suppression est effectuée avec succès.
+    const showNotificationSuccess = () => {
+      toastr.error("Film supprimé avec succès !", "Film supprimé avec succès", {
+        closeButton: true,
+        progressBar: true,
+        positionClass: 'toast-top-right',
+      });
+    };
+
+    // Fonction pour afficher une notification lorsqu'une erreur s'est produite lors de la suppression.
+    const showNotificationError = () => {
+      toastr.error("Une erreur s'est produite lors de la suppression du film." , "Erreur de suppressio", {
+        closeButton: true,
+        progressBar: true,
+        positionClass: 'toast-top-right',
+      });
+    };
 
   return (
     <div className="container mt-4">
@@ -113,14 +151,15 @@ const Films = () => {
           </thead>
           <tbody>
             {films.map(film => (
-              <tr key={film.id}  >
+              <tr key={film.id}>
                 <td>{film.name ? film.name : film.title}</td>
                 <td>{film.release_date}</td>
                 <td>{film.media_type}</td>
                 <td>{film.original_language}</td>
                 <td className="text-center">
-                <FontAwesomeIcon icon={faEye} onClick={() => handleFilmShow(film.id)} className="text-warning mx-2" style={{ cursor: 'pointer' }} />
-                <FontAwesomeIcon icon={faEdit} onClick={() => handleFilmEdit(film.id)} className="text-success" style={{ cursor: 'pointer' }} />
+                  <FontAwesomeIcon icon={faEye} onClick={() => handleFilmShow(film.id)} className="text-warning mx-2" style={{ cursor: 'pointer' }} />
+                  <FontAwesomeIcon icon={faEdit} onClick={() => handleFilmEdit(film.id)} className="text-success " style={{ cursor: 'pointer' }} />
+                  <FontAwesomeIcon icon={faTrash} onClick={() => handleFilmDelete(film.id)} className="text-danger mx-2" style={{ cursor: 'pointer' }} />
                 </td>
               </tr>
             ))}

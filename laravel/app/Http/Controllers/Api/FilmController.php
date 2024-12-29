@@ -101,4 +101,26 @@ class FilmController extends Controller
             return response()->json($film);
         }
 
+        // Supprimer un film
+        public function destroy($id)
+        {
+    
+            // Rechercher le film par son ID
+            $film = Film::find($id);
+    
+            // Si le film n'existe pas
+            if (!$film) {
+                return response()->json(['error' => 'Film non trouvé'], 404);
+            }
+    
+            // Supprimer le film
+            try {
+                $film->delete();
+                return response()->json(['message' => 'Film supprimé avec succès'], 200);
+            } catch (\Exception $e) {
+                // En cas d'erreur lors de la suppression
+                return response()->json(['error' => 'Une erreur s\'est produite lors de la suppression du film'], 500);
+            }
+        }
+
 }

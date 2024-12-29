@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+.react-confirm-alert-body h1{
+  font-size: 25px;
+  color:black
+}
