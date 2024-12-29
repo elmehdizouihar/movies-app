@@ -28,6 +28,7 @@ Route::post('/login', [AuthController::class, 'login']);
 // Route pour récupérer les films avec pagination et recherche
 Route::middleware('auth:sanctum')->get('/films', [FilmController::class, 'index']);
 Route::middleware('auth:sanctum')->get('/films/{id}', [FilmController::class, 'show']);
+Route::middleware('auth:sanctum')->get('/films/{id}/edit', [FilmController::class, 'edit']);
 
 
 

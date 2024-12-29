@@ -49,4 +49,11 @@ class FilmController extends Controller
             return response()->json($film);
         }
 
+        // Edit un film
+        public function edit($id)
+        {
+            $film = Film::findOrFail($id);
+            return response()->json($film);
+        }
+
 }
