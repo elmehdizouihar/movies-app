@@ -52,7 +52,7 @@ Une fois que le serveur Laravel est lancé, vous devez récupérer les données 
 
 php artisan fetch:trending-movies
 
-Cette commande va appeler l'API TMDb pour récupérer les films populaires et les enregistrer dans la base de données. Cela vous permet de commencer à travailler avec des données réelles de films dans l'application.
+Cette commande va appeler l'API (TMDb) pour récupérer les films populaires et les enregistrer dans la base de données. Cela vous permet de commencer à travailler avec des données réelles de films dans l'application.
 
 ### 2.9. Configurer la mise à jour quotidienne des films
 
