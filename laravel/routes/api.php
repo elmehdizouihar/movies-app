@@ -25,9 +25,5 @@ Route::get('/createUser', [AuthController::class, 'createUser']);
 Route::post('/login', [AuthController::class, 'login']);
 
 
-
-
-
-// Route::middleware(['cors'])->group(function () {
-//     Route::get('/fil', [FilmController::class, 'fil']);
-// });
+// Route pour récupérer les films avec pagination et recherche
+Route::middleware('auth:sanctum')->get('/films', [FilmController::class, 'index']);
