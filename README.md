@@ -10,7 +10,7 @@ Ce projet est une application full-stack avec  **Laravel** au backend, **React.j
 
 Commencez par cloner ce dépôt Git sur votre machine locale à l'aide de la commande suivante :
 
-git clone https://github.com/mehdifox/movies-app.git
+git clone https://github.com/elmehdizouihar/movies-app.git
 
 ## 2. Configurer le projet Laravel (Backend)
 
