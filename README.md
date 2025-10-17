@@ -2,7 +2,7 @@
 
 **Description du projet**
 
-Ce projet est une application full-stack avec  **Laravel** au backend, **React.j**s au frontend, et communique avec l'API TMDB pour afficher et mettre à jour les informations.
+Ce projet est une application full-stack avec  **Laravel** au backend, **React.j**s au frontend, et communique avec l'API TMDb pour afficher et mettre à jour les informations.
 
 # Étapes d'Installation
 
